@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ThemeManager.init();
     MoodTracker.init();
     
-    // Setup Gamification listeners
+    // Setup Gamification & Profile listeners
     document.addEventListener('gamificationUpdated', (e) => {
         const { profile, streak } = e.detail;
         const streakEl = document.getElementById('streak-display');
@@ -23,8 +23,27 @@ document.addEventListener('DOMContentLoaded', () => {
         if (levelEl) levelEl.textContent = profile.level;
     });
     
-    // Initial UI update for gamification
+    document.addEventListener('profileUpdated', (e) => {
+        updateAvatarInitials();
+    });
+
+    // Initial UI update
     Gamification.updateUI();
+    updateAvatarInitials();
+
+    function updateAvatarInitials() {
+        const profileStr = localStorage.getItem('mindmate_user');
+        if (profileStr) {
+            try {
+                const profile = JSON.parse(profileStr);
+                if (profile.name && profile.name.trim() !== '') {
+                    const initials = profile.name.charAt(0).toUpperCase();
+                    const avatarEls = document.querySelectorAll('#avatar-initial');
+                    avatarEls.forEach(el => el.textContent = initials);
+                }
+            } catch (e) {}
+        }
+    }
 
     // Theme Toggle Listener
     const themeToggleBtn = document.getElementById('theme-toggle');

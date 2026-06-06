@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile & Settings | MindMate AI</title>
+    <meta name="description" content="Manage your MindMate AI profile, academic goals, and API settings.">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" aria-label="Main Navigation">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-brain"></i>
+                MindMate AI
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+                <li class="nav-item"><a href="journal.html"><i class="fa-solid fa-book-journal-whills"></i> AI Journal</a></li>
+                <li class="nav-item"><a href="chat.html"><i class="fa-solid fa-comments"></i> Wellness Coach</a></li>
+                <li class="nav-item"><a href="focus.html"><i class="fa-solid fa-stopwatch"></i> Focus Timer</a></li>
+                <li class="nav-item"><a href="roadmap.html"><i class="fa-solid fa-map"></i> Wellness Roadmap</a></li>
+                <li class="nav-item"><a href="emergency.html"><i class="fa-solid fa-briefcase-medical"></i> Emergency Toolkit</a></li>
+                <li class="nav-item"><a href="profile.html" class="active" aria-current="page"><i class="fa-solid fa-user-gear"></i> Profile & Settings</a></li>
+            </ul>
+        </nav>
+
+        <main id="main-content" class="main-content" tabindex="-1">
+            <header class="topbar">
+                <div>
+                    <h1 class="h3 mb-0">Profile & Settings ⚙️</h1>
+                    <p class="text-secondary mb-0">Personalize your wellness journey.</p>
+                </div>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <div class="d-none d-md-flex align-items-center gap-2 bg-secondary bg-opacity-25 rounded-pill px-3 py-1 text-secondary small fw-bold">
+                        <i class="fa-solid fa-fire text-warning"></i> <span id="streak-display">0</span> Day Streak
+                    </div>
+                    <div class="d-none d-md-flex align-items-center gap-2 bg-secondary bg-opacity-25 rounded-pill px-3 py-1 text-secondary small fw-bold">
+                        <i class="fa-solid fa-star text-warning"></i> Lvl <span id="level-display">1</span>
+                    </div>
+                    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark/light theme">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <!-- User avatar -->
+                    <a href="profile.html" class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center text-decoration-none" style="width: 40px; height: 40px;" title="Profile">
+                        <span id="avatar-initial" class="fw-bold"><i class="fa-solid fa-user"></i></span>
+                    </a>
+                </div>
+            </header>
+
+            <div class="container-fluid px-0">
+                <div class="row g-4">
+                    <!-- Left Column: Gamification & API Settings -->
+                    <div class="col-12 col-lg-4 d-flex flex-column gap-4">
+                        
+                        <!-- Gamification Overview -->
+                        <div class="glass-card p-4 text-center" data-aos="fade-up">
+                            <div class="rounded-circle bg-primary bg-opacity-25 text-primary mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                <i class="fa-solid fa-user fs-1"></i>
+                            </div>
+                            <h2 class="h5 mb-1" id="display-name">Student</h2>
+                            <p class="text-secondary small mb-3">Level <span id="display-level">1</span> Scholar</p>
+                            
+                            <div class="progress mb-2" style="height: 10px;">
+                                <div class="progress-bar bg-warning" id="xp-bar" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <p class="text-secondary small text-end mb-4"><span id="xp-text">0</span> / 100 XP to next level</p>
+                            
+                            <div class="text-start border-top border-secondary border-opacity-25 pt-3">
+                                <h3 class="h6 mb-3"><i class="fa-solid fa-medal text-warning me-2"></i>Badges</h3>
+                                <div id="badges-container" class="d-flex flex-wrap gap-2">
+                                    <span class="text-secondary small fst-italic">No badges unlocked yet. Keep tracking your mood and focus!</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- API Settings -->
+                        <div class="glass-card p-4" data-aos="fade-up" data-aos-delay="100">
+                            <h2 class="h5 mb-3"><i class="fa-solid fa-key text-primary me-2"></i>API Configuration</h2>
+                            <p class="text-secondary small mb-3">MindMate AI requires a Google Gemini API key to function. Your key is stored securely in your browser's local storage and is never shared.</p>
+                            
+                            <form id="api-form">
+                                <div class="mb-3">
+                                    <input type="password" id="input-api-key" class="form-control bg-transparent text-primary border-secondary" placeholder="AIzaSy..." aria-label="Gemini API Key">
+                                </div>
+                                <button type="submit" class="btn btn-outline-primary btn-sm rounded-pill w-100">Save API Key</button>
+                                <div id="api-success" class="text-success small mt-2 d-none text-center"><i class="fa-solid fa-check me-1"></i>Key saved locally!</div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Profile Form -->
+                    <div class="col-12 col-lg-8" data-aos="fade-up" data-aos-delay="200">
+                        <div class="glass-card p-4 h-100">
+                            <h2 class="h5 mb-4">Academic Profile</h2>
+                            
+                            <form id="profile-form">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="profile-name" class="form-label text-secondary small">Your Name</label>
+                                        <input type="text" class="form-control bg-transparent text-primary border-secondary" id="profile-name" placeholder="e.g., Alex">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="profile-exam" class="form-label text-secondary small">Target Exam</label>
+                                        <select class="form-select bg-transparent text-primary border-secondary" id="profile-exam">
+                                            <option value="JEE">JEE (Engineering)</option>
+                                            <option value="NEET">NEET (Medical)</option>
+                                            <option value="UPSC">UPSC</option>
+                                            <option value="CAT">CAT</option>
+                                            <option value="GATE">GATE</option>
+                                            <option value="Board Exams">Board Exams</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="profile-goal" class="form-label text-secondary small">Target Score / Goal</label>
+                                        <input type="text" class="form-control bg-transparent text-primary border-secondary" id="profile-goal" placeholder="e.g., Top 100 Rank, 99 Percentile">
+                                    </div>
+                                    <div class="col-md-6 mt-4">
+                                        <label for="profile-study" class="form-label text-secondary small">Average Daily Study Hours: <span id="study-val-display" class="fw-bold text-primary">6</span></label>
+                                        <input type="range" class="form-range" min="1" max="16" step="1" id="profile-study">
+                                    </div>
+                                    <div class="col-md-6 mt-4">
+                                        <label for="profile-sleep" class="form-label text-secondary small">Average Daily Sleep Hours: <span id="sleep-val-display" class="fw-bold text-primary">7</span></label>
+                                        <input type="range" class="form-range" min="3" max="12" step="1" id="profile-sleep">
+                                    </div>
+                                    <div class="col-12 mt-4">
+                                        <label for="profile-bio" class="form-label text-secondary small">Motivation / Mantra</label>
+                                        <textarea class="form-control bg-transparent text-primary border-secondary" id="profile-bio" rows="3" placeholder="What keeps you going? e.g., 'Hard work beats talent.'"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-end mt-4">
+                                    <button type="submit" class="btn btn-primary rounded-pill px-4">
+                                        <i class="fa-solid fa-floppy-disk me-2"></i>Save Profile
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals and Toasts (Optional Toast for saving could go here) -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script type="module">
+        import { ThemeManager } from './src/config/theme.js';
+        import { UserProfile } from './src/features/profile/profile.js';
+        import { GeminiAPI } from './src/core/api.js';
+        import { MoodTracker } from './src/features/mood/moodTracker.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            AOS.init({ duration: 800, once: true });
+            ThemeManager.init();
+            MoodTracker.init();
+
+            // Theme Toggle
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', () => {
+                    const newTheme = ThemeManager.toggleTheme();
+                    themeToggleBtn.querySelector('i').className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+                });
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                themeToggleBtn.querySelector('i').className = currentTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            }
+
+            // Topbar elements
+            const streakDisplay = document.getElementById('streak-display');
+            if (streakDisplay) streakDisplay.textContent = MoodTracker.getStreak();
+            
+            // API Form
+            const apiInput = document.getElementById('input-api-key');
+            apiInput.value = GeminiAPI.getKey() || '';
+            document.getElementById('api-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                GeminiAPI.setKey(apiInput.value);
+                const successMsg = document.getElementById('api-success');
+                successMsg.classList.remove('d-none');
+                setTimeout(() => successMsg.classList.add('d-none'), 3000);
+            });
+
+            // Range inputs sync
+            const syncRange = (inputId, displayId) => {
+                const input = document.getElementById(inputId);
+                const display = document.getElementById(displayId);
+                input.addEventListener('input', () => display.textContent = input.value);
+            };
+            syncRange('profile-study', 'study-val-display');
+            syncRange('profile-sleep', 'sleep-val-display');
+
+            // Load Profile Data
+            const profile = UserProfile.getProfile();
+            
+            // Populate form
+            document.getElementById('profile-name').value = profile.name || '';
+            document.getElementById('profile-exam').value = profile.examType || 'JEE';
+            document.getElementById('profile-goal').value = profile.targetScore || '';
+            document.getElementById('profile-study').value = profile.studyHours || 6;
+            document.getElementById('study-val-display').textContent = profile.studyHours || 6;
+            document.getElementById('profile-sleep').value = profile.sleepHours || 7;
+            document.getElementById('sleep-val-display').textContent = profile.sleepHours || 7;
+            document.getElementById('profile-bio').value = profile.bio || '';
+
+            // Populate Gamification UI
+            document.getElementById('display-name').textContent = UserProfile.getDisplayName();
+            document.getElementById('display-level').textContent = profile.level;
+            const levelDisplay = document.getElementById('level-display');
+            if (levelDisplay) levelDisplay.textContent = profile.level;
+            
+            // Calculate XP progress (XP resets visually every 100 per level)
+            const xpInCurrentLevel = profile.xp % 100;
+            document.getElementById('xp-bar').style.width = `${xpInCurrentLevel}%`;
+            document.getElementById('xp-text').textContent = xpInCurrentLevel;
+
+            // Render Badges
+            const badgesContainer = document.getElementById('badges-container');
+            if (profile.badges && profile.badges.length > 0) {
+                badgesContainer.innerHTML = '';
+                profile.badges.forEach(badge => {
+                    const badgeSpan = document.createElement('span');
+                    badgeSpan.className = 'badge bg-secondary bg-opacity-25 text-primary border border-secondary border-opacity-50 p-2 d-flex align-items-center gap-2';
+                    badgeSpan.innerHTML = `<span class="fs-5">${badge.icon}</span> ${badge.name}`;
+                    badgesContainer.appendChild(badgeSpan);
+                });
+            }
+
+            // Save Profile Data
+            document.getElementById('profile-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const btn = e.target.querySelector('button[type="submit"]');
+                const originalHtml = btn.innerHTML;
+                
+                const updates = {
+                    name: document.getElementById('profile-name').value.trim(),
+                    examType: document.getElementById('profile-exam').value,
+                    targetScore: document.getElementById('profile-goal').value.trim(),
+                    studyHours: parseInt(document.getElementById('profile-study').value),
+                    sleepHours: parseInt(document.getElementById('profile-sleep').value),
+                    bio: document.getElementById('profile-bio').value.trim()
+                };
+
+                UserProfile.updateProfile(updates);
+
+                // Update UI visually
+                document.getElementById('display-name').textContent = UserProfile.getDisplayName();
+
+                // Button feedback
+                btn.innerHTML = '<i class="fa-solid fa-check me-2"></i>Saved!';
+                btn.classList.replace('btn-primary', 'btn-success');
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                    btn.classList.replace('btn-success', 'btn-primary');
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
