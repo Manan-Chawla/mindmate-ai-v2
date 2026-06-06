@@ -9,7 +9,7 @@ export const CONSTANTS = {
         // Warning: In a production app, the key should NOT be hardcoded. 
         // For this static version, we can either hardcode a test key or ask user for it.
         // We will default to a local storage key, and prompt if missing.
-        GEMINI_URL: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'
+        GEMINI_URL: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent'
     },
 
     // Local Storage Keys
