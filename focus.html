@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Timer | MindMate AI</title>
+    <meta name="description" content="MindMate AI Focus Timer for improved productivity.">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+    <style>
+        .timer-display {
+            font-size: 6rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            color: var(--accent-primary);
+        }
+        .timer-circle {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 8px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            position: relative;
+        }
+        .timer-progress {
+            position: absolute;
+            top: -8px; left: -8px; right: -8px; bottom: -8px;
+            border-radius: 50%;
+            border: 8px solid var(--accent-primary);
+            clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, 50% 0%);
+            transition: clip-path 1s linear;
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" aria-label="Main Navigation">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-brain"></i>
+                MindMate AI
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html">
+                        <i class="fa-solid fa-chart-line"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="journal.html">
+                        <i class="fa-solid fa-book-journal-whills"></i> AI Journal
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="chat.html">
+                        <i class="fa-solid fa-comments"></i> Wellness Coach
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="focus.html" class="active" aria-current="page">
+                        <i class="fa-solid fa-stopwatch"></i> Focus Timer
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="roadmap.html">
+                        <i class="fa-solid fa-map"></i> Wellness Roadmap
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="emergency.html">
+                        <i class="fa-solid fa-briefcase-medical"></i> Emergency Toolkit
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main id="main-content" class="main-content" tabindex="-1">
+            <header class="topbar">
+                <div>
+                    <h1 class="h3 mb-0">Focus Timer ⏱️</h1>
+                    <p class="text-secondary mb-0">Stay focused and prevent burnout.</p>
+                </div>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark/light theme">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                </div>
+            </header>
+
+            <div class="container-fluid px-0">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-8 col-lg-6" data-aos="zoom-in">
+                        <div class="glass-card p-5 text-center">
+                            <!-- Mode Selector -->
+                            <div class="btn-group mb-5" role="group" aria-label="Timer Modes" id="mode-selector">
+                                <input type="radio" class="btn-check" name="btnradio" id="btn-pomodoro" autocomplete="off" checked data-mode="POMODORO">
+                                <label class="btn btn-outline-primary" for="btn-pomodoro">Pomodoro (25/5)</label>
+
+                                <input type="radio" class="btn-check" name="btnradio" id="btn-deep" autocomplete="off" data-mode="DEEP_FOCUS">
+                                <label class="btn btn-outline-primary" for="btn-deep">Deep Focus (50/10)</label>
+
+                                <input type="radio" class="btn-check" name="btnradio" id="btn-advanced" autocomplete="off" data-mode="ADVANCED">
+                                <label class="btn btn-outline-primary" for="btn-advanced">Advanced (90/20)</label>
+                            </div>
+
+                            <h2 id="session-status" class="h4 mb-4 text-secondary">Work Session</h2>
+
+                            <!-- Timer Display -->
+                            <div class="timer-circle mb-5">
+                                <div class="timer-progress" id="timer-progress"></div>
+                                <div class="timer-display" id="time-display" aria-live="polite">25:00</div>
+                            </div>
+
+                            <!-- Controls -->
+                            <div class="d-flex justify-content-center gap-3">
+                                <button class="btn btn-primary btn-lg rounded-pill px-4" id="btn-start">
+                                    <i class="fa-solid fa-play me-2"></i>Start
+                                </button>
+                                <button class="btn btn-secondary btn-lg rounded-pill px-4 d-none" id="btn-pause">
+                                    <i class="fa-solid fa-pause me-2"></i>Pause
+                                </button>
+                                <button class="btn btn-outline-danger btn-lg rounded-pill px-4" id="btn-reset">
+                                    <i class="fa-solid fa-rotate-right me-2"></i>Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Audio for timer completion -->
+    <audio id="alert-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Focus Timer specific app script -->
+    <script type="module">
+        import { ThemeManager } from './src/config/theme.js';
+        import { FocusTimer } from './src/features/focus/focusTimer.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            AOS.init({ duration: 800, once: true });
+            ThemeManager.init();
+
+            // Theme Toggle
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', () => {
+                    const newTheme = ThemeManager.toggleTheme();
+                    themeToggleBtn.querySelector('i').className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+                });
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                themeToggleBtn.querySelector('i').className = currentTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            }
+
+            // Timer Elements
+            const display = document.getElementById('time-display');
+            const progress = document.getElementById('timer-progress');
+            const status = document.getElementById('session-status');
+            const btnStart = document.getElementById('btn-start');
+            const btnPause = document.getElementById('btn-pause');
+            const btnReset = document.getElementById('btn-reset');
+            const audio = document.getElementById('alert-sound');
+
+            // Timer Callbacks
+            const onTick = (timeLeft, totalTime) => {
+                display.textContent = FocusTimer.formatTime(timeLeft);
+                // Calculate polygon for circle progress
+                const percentage = timeLeft / totalTime;
+                // A very simplified visual indicator could be scaling or changing opacity,
+                // Full circular progress via clip-path requires JS math, or we can use conic-gradient
+                progress.style.background = `conic-gradient(var(--accent-primary) ${percentage * 360}deg, transparent 0)`;
+                progress.style.clipPath = 'none'; // reset previous clip-path approach
+                progress.style.border = 'none';
+            };
+
+            const onComplete = (isBreak) => {
+                audio.play().catch(e => console.log('Audio play failed', e));
+                alert(isBreak ? "Work session complete! Time for a break." : "Break is over! Time to focus.");
+                updateButtons(false);
+            };
+
+            const onModeChange = (modeKey, isBreak) => {
+                status.textContent = isBreak ? "Break Time ☕" : "Work Session 💻";
+                status.className = isBreak ? "h4 mb-4 text-success" : "h4 mb-4 text-primary";
+                updateButtons(false);
+            };
+
+            FocusTimer.init(onTick, onComplete, onModeChange);
+
+            // Controls
+            const updateButtons = (isRunning) => {
+                if (isRunning) {
+                    btnStart.classList.add('d-none');
+                    btnPause.classList.remove('d-none');
+                } else {
+                    btnStart.classList.remove('d-none');
+                    btnPause.classList.add('d-none');
+                }
+            };
+
+            btnStart.addEventListener('click', () => {
+                FocusTimer.start();
+                updateButtons(true);
+            });
+
+            btnPause.addEventListener('click', () => {
+                FocusTimer.pause();
+                updateButtons(false);
+            });
+
+            btnReset.addEventListener('click', () => {
+                FocusTimer.stop();
+                updateButtons(false);
+            });
+
+            // Mode Selector
+            document.querySelectorAll('#mode-selector input').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    FocusTimer.setMode(e.target.dataset.mode);
+                    updateButtons(false);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

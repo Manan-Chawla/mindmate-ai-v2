@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Toolkit | MindMate AI</title>
+    <meta name="description" content="Quick wellness interventions and emergency toolkit for immediate stress relief.">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+    <style>
+        .breathing-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-primary) 0%, transparent 70%);
+            margin: 0 auto;
+            opacity: 0.8;
+            transition: transform 4s ease-in-out, opacity 4s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .breathe-in {
+            transform: scale(1.5);
+            opacity: 1;
+        }
+
+        .breathe-out {
+            transform: scale(0.8);
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" aria-label="Main Navigation">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-brain"></i>
+                MindMate AI
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html">
+                        <i class="fa-solid fa-chart-line"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="journal.html">
+                        <i class="fa-solid fa-book-journal-whills"></i> AI Journal
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="chat.html">
+                        <i class="fa-solid fa-comments"></i> Wellness Coach
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="focus.html">
+                        <i class="fa-solid fa-stopwatch"></i> Focus Timer
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="roadmap.html">
+                        <i class="fa-solid fa-map"></i> Wellness Roadmap
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="emergency.html" class="active" aria-current="page">
+                        <i class="fa-solid fa-briefcase-medical"></i> Emergency Toolkit
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main id="main-content" class="main-content" tabindex="-1">
+            <header class="topbar">
+                <div>
+                    <h1 class="h3 mb-0 text-danger">Emergency Toolkit 🆘</h1>
+                    <p class="text-secondary mb-0">Quick relief when you're feeling overwhelmed.</p>
+                </div>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark/light theme">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                </div>
+            </header>
+
+            <div class="container-fluid px-0">
+                
+                <div class="alert alert-warning border-warning" role="alert">
+                    <i class="fa-solid fa-triangle-exclamation me-2"></i>
+                    <strong>Disclaimer:</strong> This tool is for educational wellness support only and does not replace professional medical or psychiatric help. If you are in crisis, please contact emergency services.
+                </div>
+
+                <div class="row g-4 mt-2">
+                    <!-- 4-7-8 Breathing Exercise -->
+                    <div class="col-12 col-lg-6" data-aos="fade-up">
+                        <div class="glass-card p-4 h-100 text-center">
+                            <h2 class="h4 mb-4">4-7-8 Breathing</h2>
+                            <p class="text-secondary mb-5">Follow the circle to relax your nervous system.</p>
+                            
+                            <div class="breathing-container mb-4" style="height: 300px; display: flex; align-items: center;">
+                                <div class="breathing-circle" id="breathing-circle">Ready</div>
+                            </div>
+                            
+                            <button class="btn btn-primary btn-lg rounded-pill px-5" id="btn-breathe">
+                                Start Exercise
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Grounding Techniques -->
+                    <div class="col-12 col-lg-6" data-aos="fade-up" data-aos-delay="100">
+                        <div class="glass-card p-4 h-100">
+                            <h2 class="h4 mb-4">5-4-3-2-1 Grounding</h2>
+                            <p class="text-secondary mb-4">Use this when you feel anxious or disconnected.</p>
+                            
+                            <ul class="list-group list-group-flush bg-transparent">
+                                <li class="list-group-item bg-transparent text-primary border-secondary border-opacity-25 py-3">
+                                    <i class="fa-solid fa-eye me-3 fs-5"></i>
+                                    <strong>5 things</strong> you can see around you.
+                                </li>
+                                <li class="list-group-item bg-transparent text-primary border-secondary border-opacity-25 py-3">
+                                    <i class="fa-solid fa-hand-sparkles me-3 fs-5"></i>
+                                    <strong>4 things</strong> you can touch or feel.
+                                </li>
+                                <li class="list-group-item bg-transparent text-primary border-secondary border-opacity-25 py-3">
+                                    <i class="fa-solid fa-ear-listen me-3 fs-5"></i>
+                                    <strong>3 things</strong> you can hear.
+                                </li>
+                                <li class="list-group-item bg-transparent text-primary border-secondary border-opacity-25 py-3">
+                                    <i class="fa-solid fa-wind me-3 fs-5"></i>
+                                    <strong>2 things</strong> you can smell.
+                                </li>
+                                <li class="list-group-item bg-transparent text-primary border-secondary border-opacity-25 py-3">
+                                    <i class="fa-solid fa-tongue me-3 fs-5"></i>
+                                    <strong>1 thing</strong> you can taste.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Positive Affirmations -->
+                    <div class="col-12" data-aos="fade-up" data-aos-delay="200">
+                        <div class="glass-card p-4 text-center">
+                            <h2 class="h4 mb-4">Instant Affirmation</h2>
+                            <h3 class="display-6 fw-bold text-success mb-4" id="affirmation-text" style="min-height: 80px;">
+                                "You have survived 100% of your bad days."
+                            </h3>
+                            <button class="btn btn-outline-success rounded-pill" id="btn-affirmation">
+                                <i class="fa-solid fa-rotate-right me-2"></i>New Affirmation
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script type="module">
+        import { ThemeManager } from './src/config/theme.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            AOS.init({ duration: 800, once: true });
+            ThemeManager.init();
+
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', () => {
+                    const newTheme = ThemeManager.toggleTheme();
+                    themeToggleBtn.querySelector('i').className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+                });
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                themeToggleBtn.querySelector('i').className = currentTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            }
+
+            // Breathing Logic
+            const circle = document.getElementById('breathing-circle');
+            const btnBreathe = document.getElementById('btn-breathe');
+            let isBreathing = false;
+            let breatheTimeout;
+
+            const runBreathingCycle = () => {
+                circle.textContent = "Breathe In";
+                circle.className = "breathing-circle breathe-in";
+                
+                breatheTimeout = setTimeout(() => {
+                    if(!isBreathing) return;
+                    circle.textContent = "Hold";
+                    
+                    breatheTimeout = setTimeout(() => {
+                        if(!isBreathing) return;
+                        circle.textContent = "Breathe Out";
+                        circle.className = "breathing-circle breathe-out";
+                        
+                        breatheTimeout = setTimeout(() => {
+                            if(isBreathing) runBreathingCycle();
+                        }, 8000); // Exhale 8s
+                    }, 7000); // Hold 7s
+                }, 4000); // Inhale 4s
+            };
+
+            btnBreathe.addEventListener('click', () => {
+                if(isBreathing) {
+                    isBreathing = false;
+                    clearTimeout(breatheTimeout);
+                    circle.className = "breathing-circle";
+                    circle.textContent = "Ready";
+                    btnBreathe.textContent = "Start Exercise";
+                    btnBreathe.classList.replace("btn-danger", "btn-primary");
+                } else {
+                    isBreathing = true;
+                    btnBreathe.textContent = "Stop";
+                    btnBreathe.classList.replace("btn-primary", "btn-danger");
+                    runBreathingCycle();
+                }
+            });
+
+            // Affirmations
+            const affirmations = [
+                "Your worth is not defined by an exam score.",
+                "You are capable of doing difficult things.",
+                "Resting is a productive part of the process.",
+                "You have survived 100% of your bad days.",
+                "Take it one step, one chapter, one day at a time.",
+                "Your potential is endless.",
+                "It's okay not to be okay."
+            ];
+
+            const textAffirmation = document.getElementById('affirmation-text');
+            document.getElementById('btn-affirmation').addEventListener('click', () => {
+                const rand = affirmations[Math.floor(Math.random() * affirmations.length)];
+                textAffirmation.style.opacity = 0;
+                setTimeout(() => {
+                    textAffirmation.textContent = `"${rand}"`;
+                    textAffirmation.style.transition = "opacity 0.5s";
+                    textAffirmation.style.opacity = 1;
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>

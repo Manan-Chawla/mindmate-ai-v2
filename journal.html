@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Reflection Journal | MindMate AI</title>
+    <meta name="description" content="AI powered journal to analyze stress and provide wellness insights.">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <!-- API Key Modal -->
+    <div class="modal fade" id="apiKeyModal" tabindex="-1" aria-labelledby="apiKeyModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content glass-card">
+          <div class="modal-header border-secondary border-opacity-25">
+            <h5 class="modal-title" id="apiKeyModalLabel"><i class="fa-solid fa-key me-2 text-warning"></i>Gemini API Key Required</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p class="text-secondary mb-3">To use AI features, please provide your Google Gemini API key. It is stored securely in your browser's local storage and never sent to our servers.</p>
+            <input type="password" id="input-api-key" class="form-control bg-transparent text-primary border-secondary" placeholder="AIzaSy...">
+          </div>
+          <div class="modal-footer border-secondary border-opacity-25">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="btn-save-key">Save Key</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" aria-label="Main Navigation">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-brain"></i>
+                MindMate AI
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html">
+                        <i class="fa-solid fa-chart-line"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="journal.html" class="active" aria-current="page">
+                        <i class="fa-solid fa-book-journal-whills"></i> AI Journal
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="chat.html">
+                        <i class="fa-solid fa-comments"></i> Wellness Coach
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="focus.html">
+                        <i class="fa-solid fa-stopwatch"></i> Focus Timer
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="roadmap.html">
+                        <i class="fa-solid fa-map"></i> Wellness Roadmap
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="emergency.html">
+                        <i class="fa-solid fa-briefcase-medical"></i> Emergency Toolkit
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <main id="main-content" class="main-content" tabindex="-1">
+            <header class="topbar">
+                <div>
+                    <h1 class="h3 mb-0">AI Reflection Journal 📖</h1>
+                    <p class="text-secondary mb-0">Write down your thoughts and get AI insights.</p>
+                </div>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-warning rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#apiKeyModal">
+                        <i class="fa-solid fa-key me-2"></i> API Key
+                    </button>
+                    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark/light theme">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                </div>
+            </header>
+
+            <div class="container-fluid px-0">
+                <div class="row g-4">
+                    <!-- Journal Entry Area -->
+                    <div class="col-12 col-lg-7" data-aos="fade-right">
+                        <div class="glass-card p-4 h-100">
+                            <h2 class="h5 mb-4">How are you feeling today?</h2>
+                            
+                            <div class="form-group mb-3">
+                                <textarea id="journal-input" class="form-control bg-transparent text-primary border-secondary" rows="8" placeholder="I feel overwhelmed by the upcoming exams because..." aria-label="Journal entry input"></textarea>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-secondary small" id="char-count">0 / 2000 chars</span>
+                                <button class="btn btn-primary rounded-pill px-4" id="btn-analyze">
+                                    <i class="fa-solid fa-wand-magic-sparkles me-2"></i>Analyze Entry
+                                </button>
+                            </div>
+
+                            <!-- Loading indicator -->
+                            <div id="loading-indicator" class="mt-4 d-none">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <span class="text-secondary">Gemini is analyzing your thoughts...</span>
+                                </div>
+                            </div>
+
+                            <div id="error-message" class="alert alert-danger mt-3 d-none"></div>
+                        </div>
+                    </div>
+
+                    <!-- AI Insights Display -->
+                    <div class="col-12 col-lg-5" data-aos="fade-left">
+                        <div class="glass-card p-4 h-100 d-flex flex-column" id="insight-container">
+                            <div class="text-center my-auto text-secondary" id="empty-state">
+                                <i class="fa-solid fa-robot fs-1 mb-3 opacity-50"></i>
+                                <p>Write a journal entry and click Analyze to see AI insights here.</p>
+                            </div>
+                            
+                            <!-- Insight content will be injected here -->
+                            <div id="insight-content" class="d-none">
+                                <h3 class="h5 mb-3 text-primary"><i class="fa-solid fa-bolt me-2"></i>Emotion Summary</h3>
+                                <p id="out-summary" class="mb-4">...</p>
+                                
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span class="fw-bold">Stress Level</span>
+                                        <span id="out-stress-val" class="text-warning fw-bold">0/100</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div id="out-stress-bar" class="progress-bar bg-warning" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                </div>
+
+                                <h3 class="h6 mb-2 text-primary"><i class="fa-solid fa-triangle-exclamation me-2"></i>Potential Triggers</h3>
+                                <ul id="out-triggers" class="mb-4 text-secondary small">
+                                    <!-- Triggers list -->
+                                </ul>
+
+                                <div class="p-3 bg-success bg-opacity-10 border border-success border-opacity-25 rounded mb-4">
+                                    <h3 class="h6 text-success mb-2"><i class="fa-solid fa-heart me-2"></i>Positive Reinforcement</h3>
+                                    <p id="out-positive" class="small mb-0 text-success opacity-75">...</p>
+                                </div>
+
+                                <h3 class="h6 mb-2 text-primary"><i class="fa-solid fa-list-check me-2"></i>Actionable Steps</h3>
+                                <ul id="out-actions" class="mb-0 text-secondary small">
+                                    <!-- Actions list -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script type="module">
+        import { ThemeManager } from './src/config/theme.js';
+        import { GeminiAPI } from './src/core/api.js';
+        import { AIJournal } from './src/features/journal/journal.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            AOS.init({ duration: 800, once: true });
+            ThemeManager.init();
+
+            // Theme Toggle
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', () => {
+                    const newTheme = ThemeManager.toggleTheme();
+                    themeToggleBtn.querySelector('i').className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+                });
+            }
+
+            // API Key Management
+            const keyInput = document.getElementById('input-api-key');
+            keyInput.value = GeminiAPI.getKey() || '';
+            document.getElementById('btn-save-key').addEventListener('click', () => {
+                GeminiAPI.setKey(keyInput.value);
+                const modal = bootstrap.Modal.getInstance(document.getElementById('apiKeyModal'));
+                modal.hide();
+            });
+
+            // Journal Logic
+            const inputField = document.getElementById('journal-input');
+            const charCount = document.getElementById('char-count');
+            const btnAnalyze = document.getElementById('btn-analyze');
+            const loading = document.getElementById('loading-indicator');
+            const errorMsg = document.getElementById('error-message');
+            
+            const emptyState = document.getElementById('empty-state');
+            const insightContent = document.getElementById('insight-content');
+
+            inputField.addEventListener('input', () => {
+                charCount.textContent = `${inputField.value.length} / 2000 chars`;
+            });
+
+            btnAnalyze.addEventListener('click', async () => {
+                const text = inputField.value;
+                if (!text || text.length < 10) {
+                    errorMsg.textContent = "Please write a bit more before analyzing (minimum 10 characters).";
+                    errorMsg.classList.remove('d-none');
+                    return;
+                }
+
+                errorMsg.classList.add('d-none');
+                loading.classList.remove('d-none');
+                btnAnalyze.disabled = true;
+
+                try {
+                    const analysis = await AIJournal.analyzeEntry(text);
+                    renderInsights(analysis);
+                } catch (err) {
+                    errorMsg.textContent = err.message;
+                    errorMsg.classList.remove('d-none');
+                } finally {
+                    loading.classList.add('d-none');
+                    btnAnalyze.disabled = false;
+                }
+            });
+
+            function renderInsights(data) {
+                emptyState.classList.add('d-none');
+                insightContent.classList.remove('d-none');
+
+                document.getElementById('out-summary').textContent = data.emotion_summary;
+                
+                document.getElementById('out-stress-val').textContent = `${data.stress_level}/100`;
+                const stressBar = document.getElementById('out-stress-bar');
+                stressBar.style.width = `${data.stress_level}%`;
+                if(data.stress_level < 40) stressBar.className = 'progress-bar bg-success';
+                else if(data.stress_level < 70) stressBar.className = 'progress-bar bg-warning';
+                else stressBar.className = 'progress-bar bg-danger';
+
+                const triggersList = document.getElementById('out-triggers');
+                triggersList.innerHTML = '';
+                (data.triggers || []).forEach(t => {
+                    const li = document.createElement('li');
+                    li.textContent = t;
+                    triggersList.appendChild(li);
+                });
+
+                document.getElementById('out-positive').textContent = data.positive_reinforcement;
+
+                const actionsList = document.getElementById('out-actions');
+                actionsList.innerHTML = '';
+                (data.actionable_suggestions || []).forEach(a => {
+                    const li = document.createElement('li');
+                    li.className = 'mb-2';
+                    li.innerHTML = `<i class="fa-solid fa-arrow-right text-primary me-2"></i>${a}`;
+                    actionsList.appendChild(li);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

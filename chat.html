@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wellness Coach | MindMate AI</title>
+    <meta name="description" content="MindMate AI Chat Interface for wellness coaching.">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Markdown parser for chat responses -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+    <style>
+        .chat-container {
+            height: 60vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding-right: 10px;
+        }
+        
+        .chat-bubble {
+            max-width: 80%;
+            padding: 1rem 1.5rem;
+            border-radius: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .chat-user {
+            align-self: flex-end;
+            background-color: var(--accent-primary);
+            color: white;
+            border-bottom-right-radius: 0.5rem;
+        }
+
+        .chat-assistant {
+            align-self: flex-start;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-bottom-left-radius: 0.5rem;
+        }
+        
+        /* Markdown formatting inside bubbles */
+        .chat-assistant p:last-child { margin-bottom: 0; }
+        .chat-assistant ul { padding-left: 1.5rem; margin-bottom: 0; }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 0.5rem 1rem;
+            align-items: center;
+        }
+        
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--text-secondary);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" aria-label="Main Navigation">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-brain"></i>
+                MindMate AI
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+                <li class="nav-item"><a href="journal.html"><i class="fa-solid fa-book-journal-whills"></i> AI Journal</a></li>
+                <li class="nav-item"><a href="chat.html" class="active" aria-current="page"><i class="fa-solid fa-comments"></i> Wellness Coach</a></li>
+                <li class="nav-item"><a href="focus.html"><i class="fa-solid fa-stopwatch"></i> Focus Timer</a></li>
+                <li class="nav-item"><a href="roadmap.html"><i class="fa-solid fa-map"></i> Wellness Roadmap</a></li>
+                <li class="nav-item"><a href="emergency.html"><i class="fa-solid fa-briefcase-medical"></i> Emergency Toolkit</a></li>
+            </ul>
+        </nav>
+
+        <main id="main-content" class="main-content" tabindex="-1">
+            <header class="topbar">
+                <div>
+                    <h1 class="h3 mb-0">AI Wellness Coach 💬</h1>
+                    <p class="text-secondary mb-0">Your 24/7 companion for study stress and motivation.</p>
+                </div>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-danger btn-sm rounded-pill px-3" id="btn-clear-chat">
+                        <i class="fa-solid fa-trash-can me-1"></i> Clear History
+                    </button>
+                    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark/light theme">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                </div>
+            </header>
+
+            <div class="container-fluid px-0">
+                <div class="row">
+                    <div class="col-12 col-lg-10 col-xl-8 mx-auto" data-aos="fade-up">
+                        <div class="glass-card p-0 d-flex flex-column h-100 border-0" style="background: var(--bg-secondary);">
+                            
+                            <div class="p-4 border-bottom border-secondary border-opacity-25 d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-primary bg-opacity-25 d-flex align-items-center justify-content-center text-primary" style="width: 48px; height: 48px;">
+                                    <i class="fa-solid fa-robot fs-4"></i>
+                                </div>
+                                <div>
+                                    <h2 class="h5 mb-0">MindMate Assistant</h2>
+                                    <span class="small text-success"><i class="fa-solid fa-circle text-success small me-1"></i>Online</span>
+                                </div>
+                            </div>
+
+                            <div class="chat-container p-4" id="chat-messages">
+                                <!-- Messages injected here -->
+                            </div>
+
+                            <div class="p-3 border-top border-secondary border-opacity-25 bg-primary bg-opacity-10" style="border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
+                                <div id="api-error-alert" class="alert alert-danger d-none py-2 px-3 small mb-2"></div>
+                                <form id="chat-form" class="d-flex gap-2">
+                                    <input type="text" id="chat-input" class="form-control rounded-pill bg-transparent border-secondary text-primary px-4" placeholder="Type your message here..." autocomplete="off">
+                                    <button type="submit" class="btn btn-primary rounded-pill px-4" id="btn-send">
+                                        <i class="fa-solid fa-paper-plane"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script type="module">
+        import { ThemeManager } from './src/config/theme.js';
+        import { AICoach } from './src/features/chat/chat.js';
+        import { Utils } from './src/core/utils.js';
+        import { GeminiAPI } from './src/core/api.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            AOS.init({ duration: 800, once: true });
+            ThemeManager.init();
+            AICoach.init();
+
+            // Theme Toggle
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', () => {
+                    const newTheme = ThemeManager.toggleTheme();
+                    themeToggleBtn.querySelector('i').className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+                });
+            }
+
+            const chatMessages = document.getElementById('chat-messages');
+            const chatForm = document.getElementById('chat-form');
+            const chatInput = document.getElementById('chat-input');
+            const errorAlert = document.getElementById('api-error-alert');
+
+            function renderMessage(role, content, animated = false) {
+                const bubble = document.createElement('div');
+                bubble.className = `chat-bubble chat-${role}`;
+                
+                if (role === 'assistant') {
+                    // Use marked to parse markdown from AI
+                    bubble.innerHTML = marked.parse(content);
+                } else {
+                    bubble.textContent = content; // Safe text insertion
+                }
+
+                if (animated) {
+                    bubble.style.opacity = 0;
+                    bubble.style.transform = 'translateY(10px)';
+                    bubble.style.transition = 'all 0.3s ease';
+                    chatMessages.appendChild(bubble);
+                    requestAnimationFrame(() => {
+                        bubble.style.opacity = 1;
+                        bubble.style.transform = 'none';
+                    });
+                } else {
+                    chatMessages.appendChild(bubble);
+                }
+                
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function renderHistory() {
+                chatMessages.innerHTML = '';
+                const history = AICoach.getHistory();
+                
+                if (history.length === 0) {
+                    renderMessage('assistant', "Hi there! I'm MindMate, your wellness companion. How are your studies going? Feeling stressed about any upcoming exams?");
+                } else {
+                    history.forEach(msg => renderMessage(msg.role, msg.content));
+                }
+            }
+
+            function showTyping() {
+                const typingObj = document.createElement('div');
+                typingObj.className = 'chat-bubble chat-assistant typing-indicator';
+                typingObj.id = 'typing-indicator';
+                typingObj.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+                chatMessages.appendChild(typingObj);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function removeTyping() {
+                const ind = document.getElementById('typing-indicator');
+                if (ind) ind.remove();
+            }
+
+            renderHistory();
+
+            chatForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const text = chatInput.value.trim();
+                if (!text) return;
+
+                if (!GeminiAPI.getKey()) {
+                    errorAlert.textContent = "Please add your API key in the AI Journal section first.";
+                    errorAlert.classList.remove('d-none');
+                    return;
+                }
+
+                errorAlert.classList.add('d-none');
+                chatInput.value = '';
+                chatInput.disabled = true;
+
+                renderMessage('user', text, true);
+                showTyping();
+
+                try {
+                    const response = await AICoach.sendMessage(text);
+                    removeTyping();
+                    renderMessage('assistant', response, true);
+                } catch (err) {
+                    removeTyping();
+                    errorAlert.textContent = err.message;
+                    errorAlert.classList.remove('d-none');
+                } finally {
+                    chatInput.disabled = false;
+                    chatInput.focus();
+                }
+            });
+
+            document.getElementById('btn-clear-chat').addEventListener('click', () => {
+                if(confirm('Are you sure you want to clear your chat history?')) {
+                    AICoach.clearHistory();
+                    renderHistory();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
